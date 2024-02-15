@@ -89,11 +89,6 @@ app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page  not found"));
 });
 
-app.use((req, res, err, next) => {
-  let { statusCode = 500, message = "Something went wrong" } = err;
-  // /res.(statusCode).render("error.ejs", {message});
-});
-
 app.listen(8080, () => {
   console.log("server is listening to port 8080");
 });
