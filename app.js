@@ -18,7 +18,7 @@ const User = require("./models/user.js");
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
-const { error } = require("console");
+
 
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -58,7 +58,7 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    expires: Date.now() + 7 * 24 * 60 * 60 * 1000, //1week cal = 7days*24hour*60min*60sec*1000milisec
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,  //1week cal = 7days*24hour*60min*60sec*1000milisec
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   },
@@ -88,6 +88,11 @@ app.use("/", userRouter);
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page  not found"));
 });
+
+app.use((err,req,res,next) => {
+  let {statusCode = 500, message = "Connection error"} = err;
+  res.status(statusCode).render("error.ejs", {message});
+})
 
 app.listen(8080, () => {
   console.log("server is listening to port 8080");
